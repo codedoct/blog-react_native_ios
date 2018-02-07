@@ -11,6 +11,9 @@ import {
   TouchableOpacity,
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
+  ScrollView,
+  FlatList,
+  SectionList,
   Button,
   Alert,
   Image,
@@ -27,7 +30,7 @@ export default class NavigatorIOSApp extends Component {
       <NavigatorIOS
         initialRoute={{
           title: 'Codedoct',
-          component: HandlingTouches,
+          component: UsingListViews2,
         }}
         style={{flex: 1}}
       />
@@ -167,6 +170,61 @@ class HandlingTouches extends Component {
   }
 }
 
+class UsingAScrollView extends Component {
+  render () {
+    return(
+      <View style={styles.container}>
+        <ScrollView>
+          <Text style={{fontSize: 100}}>
+            start to scroll start to scroll start to scroll start to scroll start to scroll start to scroll start to scroll 
+          </Text>
+        </ScrollView>
+      </View>
+    )
+  }
+}
+
+class UsingListViews extends Component {
+  render () {
+    return(
+      <View style={styles.container}>
+        <FlatList
+          data={[
+            {
+              name: 'Devin'
+            },
+            {name: 'Jackson'},
+            {name: 'James'},
+            {name: 'Joel'},
+            {name: 'John'},
+            {name: 'Jillian'},
+            {name: 'Jimmy'},
+            {name: 'Julie'},
+          ]}
+          renderItem={({item}) => <Text>{item.name}</Text>}
+        />
+      </View>
+    )
+  }
+}
+class UsingListViews2 extends Component {
+  render () {
+    return(
+      <View style={styles.container}>
+        <SectionList
+          sections={[
+            {title: 'D', data: ['Devin']},
+            {title: 'J', data: ['Jackson', 'James', 'Jillian', 'Jimmy', 'Joel', 'John', 'Julie']},
+          ]}
+          renderItem={({item}) => <Text>{item}</Text>}
+          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
+    )
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -176,7 +234,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   button: {
-    'marginBottom': 30,
+    marginBottom: 30,
     width: 260,
     alignItems: 'center',
     backgroundColor: '#2196F3'
@@ -184,5 +242,14 @@ const styles = StyleSheet.create({
   buttonText: {
     padding: 20,
     color: 'white'
+  },
+  sectionHeader: {
+    paddingTop: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 2,
+    fontSize: 14,
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(247,247,247,1.0)',
   },
 });
