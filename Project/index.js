@@ -14,6 +14,8 @@ import {
   ScrollView,
   FlatList,
   SectionList,
+  ActivityIndicator,
+  ListView,
   Button,
   Alert,
   Image,
@@ -30,7 +32,7 @@ export default class NavigatorIOSApp extends Component {
       <NavigatorIOS
         initialRoute={{
           title: 'Codedoct',
-          component: UsingListViews2,
+          component: Networking,
         }}
         style={{flex: 1}}
       />
@@ -222,6 +224,67 @@ class UsingListViews2 extends Component {
         />
       </View>
     )
+  }
+}
+
+class Networking extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true
+    }
+  }
+
+  async componentDidMount() {
+    // return fetch('https://facebook.github.io/react-native/movies.json')
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //     let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    //     this.setState({
+    //       isLoading: false,
+    //       dataSource: ds.cloneWithRows(responseJson.movies),
+    //     }, function() {
+    //       // do something with new state
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+
+    try {
+      let response = await fetch(
+        'https://facebook.github.io/react-native/movies.json'
+      );
+      let responseJson = await response.json();
+      let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      this.setState({
+        isLoading: false,
+        dataSource: ds.cloneWithRows(responseJson.movies),
+      }, function() {
+        // do something with new state
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.container}>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(rowData) => <Text>{rowData.title}, {rowData.releaseYear}</Text>}
+        />
+      </View>
+    );
   }
 }
 
